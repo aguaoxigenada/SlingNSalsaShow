@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "BK_Cube.generated.h"
+#include "MovingObjects.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCubeReceiveDamage, int, CurrentLife);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnCubeDeath);
@@ -14,53 +14,59 @@ class UStaticMeshComponent;
 class UParticleSystemComponent;
 
 UCLASS()
-class ABK_Cube : public AActor
+class SLINGNSALSASHOW_API AMovingObjects : public AActor
 {
 	GENERATED_BODY()
-
-public:
-	// Sets default values for this actor's properties
-	ABK_Cube();
-
-	UPROPERTY(BlueprintAssignable)
-		FOnCubeReceiveDamage OnCubeReceiveDamage;
+	
+public:	
+	AMovingObjects();
 
 	UPROPERTY(BlueprintAssignable)
-		FOnCubeDeath OnCubeDeath;
+	FOnCubeReceiveDamage OnCubeReceiveDamage;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnCubeDeath OnCubeDeath;
 
 	UFUNCTION(BlueprintCallable)
-		void GetDamage(int Damage);
+	void GetDamage(int Damage);
+
 
 	UFUNCTION()
-		void HandleDestruction();
+	void HandleDestruction();
 
 	UFUNCTION(BlueprintCallable)
-		FORCEINLINE int GetCurrentLife() { return CurrentLife; };
+	FORCEINLINE int GetCurrentLife() { return CurrentLife; };
 
 	UFUNCTION(BlueprintCallable)
-		FORCEINLINE int GetMaxLife() { return MaxLife; };
+	FORCEINLINE int GetMaxLife() { return MaxLife; };
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		UBoxComponent* BoxCollision = nullptr;
+	UBoxComponent* BoxCollision = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		UStaticMeshComponent* Mesh = nullptr;
+	UStaticMeshComponent* Mesh = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		UParticleSystemComponent* ExplosionParticle = nullptr;
+	UParticleSystemComponent* ExplosionParticle = nullptr;
+
+	UPROPERTY(EditAnywhere)
+	bool canRotate;
+
+	UFUNCTION()
+	void RotatePlatform(float DeltaTime);
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		int MaxLife = 5;
+	int MaxLife = 5;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		int CurrentLife;
+	int CurrentLife;
 
-	UFUNCTION(BlueprintImplementableEvent) 
-		void BP_GetDamageEvent(int ActualCurrentLife); 
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_GetDamageEvent(int ActualCurrentLife);
 
 	FTimerHandle TimerHandle;
 	FTimerDelegate TimerDelegate;
@@ -70,29 +76,16 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
-	class ABomberKiddoGameMode* BomberKiddoGameMode;
-
-	UPROPERTY(EditAnywhere, Category = "Movement Platform")
-		FVector PlatformVelocity = FVector(100, 0, 0);
-
-	UPROPERTY(EditAnywhere, Category = "Movement Platform")
-		float MoveDistance = 100;
+	class SlingNSalsaShowGameMode* SlingNSalsaGameMode;
 
 	UPROPERTY(EditAnywhere, Category = "Rotation")
-		FRotator RotationVelocity;
+	FRotator RotationVelocity;
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
-		class UParticleSystem* DeathParticles;
+	class UParticleSystem* DeathParticles;
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
-		class USoundBase* DeathSound;
+	class USoundBase* DeathSound;
 
-	FVector StartLocation;
-
-	void MovePlatform(float DeltaTime);
-	void RotatePlatform(float DeltaTime);
-
-	bool ShouldPlatformReturn() const;
-	float GetDistanceMoved() const;
 
 };
