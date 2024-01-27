@@ -3,22 +3,23 @@
 
 #include "MyPawn.h"
 #include "Components/BoxComponent.h"
-
+#include "Components/StaticMeshComponent.h"
 // Sets default values
 AMyPawn::AMyPawn()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	// Create a root scene component
-	USceneComponent* RootSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootSceneComponent"));
-	RootComponent = RootSceneComponent;
+	//USceneComponent* RootSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootSceneComponent"));
+	
 	
 	// Init BoxComponent
 	myBoxCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
 	
 	// Init Mesh
 	myMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MyMesh"));
-	myMesh->SetupAttachment(RootSceneComponent);
+	RootComponent = myMesh;
+	//myMesh->SetupAttachment(RootComponent);
 
 	// Init BoxComponent
 	myBoxCollision->SetupAttachment(myMesh);
@@ -34,6 +35,7 @@ AMyPawn::AMyPawn()
 void AMyPawn::BeginPlay()
 {
 	Super::BeginPlay();
+	//ThePlane = Plane.GetDefaultObject();
 	//GetController()->OnReleased.AddDynamic(this, &AMyPawn::OnReleased);
 }
 
@@ -42,12 +44,25 @@ void AMyPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	// Check for some condition to trigger the impulse (e.g., a key press)
+	if (bShouldApplyImpulse)
+	{
+		myMesh->AddImpulse(impulse, NAME_None, true);
+		bShouldApplyImpulse = false;  // Reset the condition to avoid continuous impulses
+
+		UE_LOG(LogTemp, Warning, TEXT("=======> bShouldApplyImpulse"));
+	}
 }
 
 // Called to bind functionality to input
 void AMyPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+}
+
+void AMyPawn::SetThePlane(AActor* LevelPlane)
+{
+	ThePlane = LevelPlane;
 }
 
 void AMyPawn::OnClicked(UPrimitiveComponent* UPrimitiveComponent, FKey ButtonPressed)
@@ -84,14 +99,20 @@ void AMyPawn::OnReleased(AActor* UPrimitiveComponent, FKey ButtonReleased)
 					FVector MouseWorldPosition = HitResult.Location;
 					// MouseWorldPosition is the location in the world where the mouse is pointing
 					UE_LOG(LogTemp, Display, TEXT("Mouse position value: %s"), *MouseWorldPosition.ToString());
+					
 
-					if(Plane.Get() != nullptr)
+					if(ThePlane)
 					{
-						FVector planePoint = FVector(0, 0, -50);
-						FVector planeUpVector = Plane.Get()->GetActorUpVector(); 
-						FVector projectedActorPoint = FVector::PointPlaneProject(playerLocation, planePoint, planeUpVector).GetSafeNormal();
-						FVector projectedMousePoint = FVector::PointPlaneProject(MouseWorldPosition, planePoint, planeUpVector).GetSafeNormal();
+						FVector planePoint = FVector(-1200.f, -820.f, 0);
+						FVector planeUpVector = ThePlane->GetActorUpVector(); 
+						FVector projectedActorPoint = FVector::PointPlaneProject(playerLocation, planePoint, planeUpVector);
+						FVector projectedMousePoint = FVector::PointPlaneProject(MouseWorldPosition, planePoint, planeUpVector);
 
+						FVector forceDirection = projectedActorPoint.GetSafeNormal() - projectedMousePoint.GetSafeNormal();
+
+						impulse = (forceDirection * 1000.f);
+
+						bShouldApplyImpulse = true;
 						// void DrawDebugDirectionalArrow
 						// (
 						//     const UWorld * InWorld,
@@ -105,7 +126,7 @@ void AMyPawn::OnReleased(AActor* UPrimitiveComponent, FKey ButtonReleased)
 						//     float Thickness
 						// )
 						 UE_LOG(LogTemp, Warning, TEXT("=======> DRAWING ARROW"));
-						 DrawDebugDirectionalArrow(GetWorld(), playerLocation, MouseWorldPosition, 300.f, FColor::Red, true, 0.f, 5, 2.f);
+						 DrawDebugDirectionalArrow(GetWorld(), projectedMousePoint, projectedActorPoint, 1000.f, FColor::Red, true, 0.f, 5, 2.f);
 					}
 				}	
 			}

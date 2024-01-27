@@ -26,10 +26,16 @@ public:
 	UFUNCTION()
 	void OnClicked(UPrimitiveComponent* TouchedActor, FKey ButtonPressed);
 
+	UFUNCTION(BlueprintCallable)
+	void SetThePlane(AActor* LevelPlane);
+
 	// Handler for when the click is released
 	UFUNCTION(BlueprintCallable)
 	void OnReleased(AActor* TouchedActor, FKey ButtonReleased);
 	
+	
+	
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -41,7 +47,14 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	
+
 private:
-	UPROPERTY(EditInstanceOnly, Category = "Plane Ptr")
-	TWeakObjectPtr<AActor> Plane;
+	//UPROPERTY(EditAnywhere, Category = "Plane Ptr")
+	//TSubclassOf<AActor> Plane;
+	//TWeakObjectPtr<AActor> Plane
+	
+	AActor* ThePlane;
+	bool bShouldApplyImpulse;
+	FVector impulse;
 };
