@@ -1,7 +1,5 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "TheTriggerBoxes.h"
+#include "PlatformMovement.h"
 
 // Sets default values for this component's properties
 UTheTriggerBoxes::UTheTriggerBoxes()
@@ -14,21 +12,84 @@ UTheTriggerBoxes::UTheTriggerBoxes()
 }
 
 
-// Called when the game starts
 void UTheTriggerBoxes::BeginPlay()
 {
-	Super::BeginPlay();
+    Super::BeginPlay();
+    SetPlatform(ChoosenPlatform.Get());
 
-	// ...
-	
 }
 
 
-// Called every frame
 void UTheTriggerBoxes::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+    Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+    if (Platform == nullptr) return;
+
+    AActor* Actor = GetAcceptableActor();
+
+    if (Actor != nullptr)
+    {
+      //  CheckedPlayer = CheckIfActorIsPlayer(Actor);
+        /*
+        UPrimitiveComponent* Component = Cast<UPrimitiveComponent>(Actor->GetRootComponent());
+        if (Component != nullptr && !CheckedPlayer)
+        {
+            Component->SetSimulatePhysics(false);
+           // Actor->AttachToComponent(FAttachmentTransformRules::KeepWorldTransform);
+        }
+        */
+        Platform->SetShouldMove(true);
+    }
+
+    else
+    {
+        // Podriamos hacer que simplemente rompa cosas y listo.
+        Platform->SetShouldMove(false);
+    }
+}
+
+/*
+bool UTheTriggerBoxes::CheckIfActorIsPlayer(AActor* Player)
+{
+    if (Player == nullptr) return false;
+
+    bIsPlayer = Player->ActorHasTag("ThePlayer");
+    return bIsPlayer;
+}
+*/
+void UTheTriggerBoxes::SetPlatform(AActor* ThePlatform)
+{
+    if (ThePlatform == nullptr) return;
+
+    TArray<UActorComponent*> Components;
+
+    ThePlatform->GetComponents(Components);
+
+    for (UActorComponent* Comp : Components)
+    {
+        UPlatformMovement* thisComp = Cast<UPlatformMovement>(Comp);
+        if (thisComp)
+        {
+            Platform = thisComp;
+        }
+    }
+}
+
+AActor* UTheTriggerBoxes::GetAcceptableActor() const
+{
+    TArray<AActor*> Actors;
+
+    GetOwner()->GetOverlappingActors(Actors);
+   
+    for (AActor* Actor : Actors)
+    {
+        if (Actor->ActorHasTag(AcceptableActorTag))
+        {
+            //UE_LOG(LogTemp, Warning, TEXT("Overlapping Correct Actor"));
+            return Actor;
+        }
+    }
+    return nullptr;
 }
 

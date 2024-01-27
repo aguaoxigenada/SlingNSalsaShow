@@ -14,14 +14,13 @@ AMyPawn::AMyPawn()
 	RootComponent = RootSceneComponent;
 	
 	// Init BoxComponent
-	UBoxComponent* BoxCollision  = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
+	myBoxCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
 	
 	// Init Mesh
 	myMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MyMesh"));
 	myMesh->SetupAttachment(RootSceneComponent);
 
 	// Init BoxComponent
-	myBoxCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("MyBoxComponent"));
 	myBoxCollision->SetupAttachment(myMesh);
 	myBoxCollision->SetCollisionProfileName(TEXT("OverlapAll"));
 
@@ -29,14 +28,13 @@ AMyPawn::AMyPawn()
 	myMesh->SetCollisionResponseToChannel(ECC_Visibility, ECR_Overlap);
 
 	myMesh->OnClicked.AddDynamic(this, &AMyPawn::OnClicked);
-	GetController()->OnReleased.AddDynamic(this, &AMyPawn::OnReleased);
 }
 
 // Called when the game starts or when spawned
 void AMyPawn::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	//GetController()->OnReleased.AddDynamic(this, &AMyPawn::OnReleased);
 }
 
 // Called every frame
@@ -106,8 +104,8 @@ void AMyPawn::OnReleased(AActor* UPrimitiveComponent, FKey ButtonReleased)
 						//     uint8 DepthPriority,
 						//     float Thickness
 						// )
-						// UE_LOG(LogTemp, Warning, TEXT("=======> DRAWING ARROW"));
-						// DrawDebugDirectionalArrow(GetWorld(), playerLocation, MouseWorldPosition, 300.f, FColor::Red, true, 0.f, 5, 2.f);
+						 UE_LOG(LogTemp, Warning, TEXT("=======> DRAWING ARROW"));
+						 DrawDebugDirectionalArrow(GetWorld(), playerLocation, MouseWorldPosition, 300.f, FColor::Red, true, 0.f, 5, 2.f);
 					}
 				}	
 			}

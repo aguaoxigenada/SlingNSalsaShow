@@ -27,7 +27,7 @@ public:
 	void OnClicked(UPrimitiveComponent* TouchedActor, FKey ButtonPressed);
 
 	// Handler for when the click is released
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void OnReleased(AActor* TouchedActor, FKey ButtonReleased);
 	
 protected:
@@ -42,6 +42,6 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
-	UPROPERTY(EditInstanceOnly)
+	UPROPERTY(EditInstanceOnly, Category = "Plane Ptr")
 	TWeakObjectPtr<AActor> Plane;
 };

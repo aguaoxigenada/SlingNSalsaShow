@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "TheTriggerBoxes.generated.h"
 
+class UPlatformMovement;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SLINGNSALSASHOW_API UTheTriggerBoxes : public UActorComponent
@@ -16,13 +17,24 @@ public:
 	// Sets default values for this component's properties
 	UTheTriggerBoxes();
 
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+protected:
+	UPROPERTY(EditInstanceOnly)
+	FName AcceptableActorTag;
+
+	virtual void BeginPlay() override;
+	AActor* GetAcceptableActor() const;
+
+
+private:
+	UPROPERTY(EditInstanceOnly)
+	TWeakObjectPtr<AActor> ChoosenPlatform;
+
+	bool CheckIfActorIsPlayer(AActor* Player);
+	void SetPlatform(AActor* ThePlatform);
+	bool bIsPlayer;
+	bool CheckedPlayer;
+
+	UPlatformMovement* Platform;
 };
