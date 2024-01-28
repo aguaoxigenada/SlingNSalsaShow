@@ -33,6 +33,10 @@ public:
 	// Handler for when the click is released
 	UFUNCTION(BlueprintCallable)
 	void OnReleased(AActor* TouchedActor, FKey ButtonReleased);
+
+	void LaunchPlayer(const FVector &impulseDirection, float launchStrength);
+
+	FVector GetImpulse() const;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -46,8 +50,8 @@ public:
 
 private:
 	AActor* ThePlane;
-	bool bShouldApplyImpulse;
 	FVector impulse;
-
+	bool bShouldApplyImpulse;
 	bool bClickedOnThePlayer = false;
+	float appliedImpulseStrength = 0.f;
 };
