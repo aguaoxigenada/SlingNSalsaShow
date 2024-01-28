@@ -26,7 +26,6 @@ void ASlingNSalsaShowGameMode::ActorDied(AActor* DeadActor)
     if (DeadActor->ActorHasTag("Wave1")) BP_SpawnNewObjective(0);
 	if (DeadActor->ActorHasTag("Wave2")) BP_SpawnNewObjective(1);
     if (DeadActor->ActorHasTag("Wave3")) BP_SpawnNewObjective(2);
-    if (DeadActor->ActorHasTag("Wave4")) BP_SpawnNewObjective(3);
-	if (TargetTriggers == 0 && DeadActor->ActorHasTag("Wave5")) OnPlayerWin.Broadcast();
+	if (TargetTriggers == 0 && DeadActor->ActorHasTag("Wave4")) OnPlayerWin.Broadcast();
 }
 
