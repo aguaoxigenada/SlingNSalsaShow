@@ -102,7 +102,7 @@ void AMyPawn::SetThePlane(AActor* LevelPlane)
 
 void AMyPawn::OnClicked(UPrimitiveComponent* TouchedActor, FKey ButtonPressed)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("OnClicked"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("OnClicked"));
 	bClickedOnThePlayer = true;
 	UE_LOG(LogTemp, Warning, TEXT("OnClicked on the player %s -"), bClickedOnThePlayer ? TEXT("true") : TEXT("false"));
 }
@@ -114,7 +114,7 @@ void AMyPawn::OnReleased(AActor* UPrimitiveComponent, FKey ButtonReleased)
 		return;
 	}
 	UE_LOG(LogTemp, Warning, TEXT("OnReleased %s -"), bClickedOnThePlayer ? TEXT("true") : TEXT("false"));
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("OnReleased"));
+//	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("OnReleased"));
 	FVector playerLocation =  GetActorLocation();
 	EPairedAxis pairedAxis = ButtonReleased.GetPairedAxis();
 	
@@ -152,7 +152,7 @@ void AMyPawn::OnReleased(AActor* UPrimitiveComponent, FKey ButtonReleased)
 						appliedImpulseStrength = 750.f;
 						bShouldApplyImpulse = true;
 						UE_LOG(LogTemp, Warning, TEXT("=======> DRAWING ARROW %s"), *forceDirection.ToString());
-						DrawDebugDirectionalArrow(GetWorld(), projectedMousePoint, projectedActorPoint, 1000.f, FColor::Red, true, 0.f, 5, 2.f);
+						//DrawDebugDirectionalArrow(GetWorld(), projectedMousePoint, projectedActorPoint, 1000.f, FColor::Red, true, 0.f, 5, 2.f);
 					}
 				}	
 			}
@@ -172,7 +172,7 @@ void AMyPawn::LaunchPlayer(const FVector &impulseDirection, float launchStrength
 	const FVector lineStart =  GetActorLocation();
 	const FVector lineEnd = lineStart + impulse * launchStrength; 
 	
-	DrawDebugDirectionalArrow(GetWorld(), lineStart, lineEnd, 300.f, FColor::Green, true, 0.f, 5, 2.f);
+	//DrawDebugDirectionalArrow(GetWorld(), lineStart, lineEnd, 300.f, FColor::Green, true, 0.f, 5, 2.f);
 }
 
 FVector AMyPawn::GetImpulse() const
