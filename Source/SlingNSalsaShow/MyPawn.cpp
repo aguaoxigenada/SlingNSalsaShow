@@ -49,8 +49,7 @@ void AMyPawn::Tick(float DeltaTime)
 	{
 		myMesh->AddImpulse(impulse, NAME_None, true);
 		bShouldApplyImpulse = false;  // Reset the condition to avoid continuous impulses
-
-		UE_LOG(LogTemp, Warning, TEXT("=======> bShouldApplyImpulse"));
+		UE_LOG(LogTemp, Display, TEXT("bShouldApplyImpulse: %s"), *impulse.ToString());
 	}
 }
 
@@ -65,20 +64,25 @@ void AMyPawn::SetThePlane(AActor* LevelPlane)
 	ThePlane = LevelPlane;
 }
 
-void AMyPawn::OnClicked(UPrimitiveComponent* UPrimitiveComponent, FKey ButtonPressed)
+void AMyPawn::OnClicked(UPrimitiveComponent* TouchedActor, FKey ButtonPressed)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("OnClicked"));
-	UE_LOG(LogTemp, Display, TEXT("OnClicked"));
+	bClickedOnThePlayer = true;
+	UE_LOG(LogTemp, Warning, TEXT("OnClicked on the player %s -"), bClickedOnThePlayer ? TEXT("true") : TEXT("false"));
 }
 
 void AMyPawn::OnReleased(AActor* UPrimitiveComponent, FKey ButtonReleased)
 {
+	if(!bClickedOnThePlayer)
+	{
+		return;
+	}
+	UE_LOG(LogTemp, Warning, TEXT("OnReleased %s -"), bClickedOnThePlayer ? TEXT("true") : TEXT("false"));
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("OnReleased"));
-
 	FVector playerLocation =  GetActorLocation();
 	EPairedAxis pairedAxis = ButtonReleased.GetPairedAxis();
 	
-	UE_LOG(LogTemp, Display, TEXT("Vector value: %s"), *playerLocation.ToString());
+	UE_LOG(LogTemp, Display, TEXT("playerLocation value: %s"), *playerLocation.ToString());
 	
 	const APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
 	if(PlayerController != nullptr)
@@ -108,29 +112,18 @@ void AMyPawn::OnReleased(AActor* UPrimitiveComponent, FKey ButtonReleased)
 						FVector projectedActorPoint = FVector::PointPlaneProject(playerLocation, planePoint, planeUpVector);
 						FVector projectedMousePoint = FVector::PointPlaneProject(MouseWorldPosition, planePoint, planeUpVector);
 
-						FVector forceDirection = projectedActorPoint.GetSafeNormal() - projectedMousePoint.GetSafeNormal();
+						FVector forceDirection = (projectedActorPoint- projectedMousePoint).GetSafeNormal();
 
 						impulse = (forceDirection * 1000.f);
 
 						bShouldApplyImpulse = true;
-						// void DrawDebugDirectionalArrow
-						// (
-						//     const UWorld * InWorld,
-						//     FVector const & LineStart,
-						//     FVector const & LineEnd,
-						//     float ArrowSize,
-						//     FColor const & Color,
-						//     bool bPersistentLines,
-						//     float LifeTime,
-						//     uint8 DepthPriority,
-						//     float Thickness
-						// )
-						 UE_LOG(LogTemp, Warning, TEXT("=======> DRAWING ARROW"));
-						 DrawDebugDirectionalArrow(GetWorld(), projectedMousePoint, projectedActorPoint, 1000.f, FColor::Red, true, 0.f, 5, 2.f);
+						UE_LOG(LogTemp, Warning, TEXT("=======> DRAWING ARROW %s"), *forceDirection.ToString());
+						DrawDebugDirectionalArrow(GetWorld(), projectedMousePoint, projectedActorPoint, 1000.f, FColor::Red, true, 0.f, 5, 2.f);
 					}
 				}	
 			}
 		}	
 	}
+	bClickedOnThePlayer = false;
 }
 
