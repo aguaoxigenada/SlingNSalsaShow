@@ -6,6 +6,8 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/Pawn.h"
+#include "MyAnimInstance.h"
+
 #include "MyPawn.generated.h"
 
 UCLASS()
@@ -55,6 +57,7 @@ public:
 private:
 	AActor* ThePlane;
 	FVector impulse;
+	UMyAnimInstance* MyAnimInstance;
 	bool bShouldApplyImpulse;
 	bool bClickedOnThePlayer = false;
 	float appliedImpulseStrength = 0.f;
