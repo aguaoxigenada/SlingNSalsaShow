@@ -75,8 +75,8 @@ void ATriggerActors::OnEndOverlapMyPawn(UPrimitiveComponent* OverlappedComponent
 void ATriggerActors::CheckObjectsPassedPoint(AMyPawn* MyPawn)
 {
 	// Iterate through all objects of your class
-	FVector thisLocation = this->GetActorLocation();
-	float thisXPosition = StaticCast<float>(thisLocation.X);
+	//FVector thisLocation = this->GetActorLocation();
+	//float thisXPosition = StaticCast<float>(thisLocation.X);
 	float PawnsXPosition = MyPawn->GetActorLocation().X;
 
 	/*if (abs(PawnsXPosition) > abs(thisXPosition))
