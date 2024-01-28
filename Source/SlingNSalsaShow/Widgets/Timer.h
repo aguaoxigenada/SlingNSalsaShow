@@ -38,7 +38,7 @@ protected:
 private:
 
 	float StartDelay = 240.f;
-	int TimerCount = 500;
+	int TimerCount = 180;
 	int RepeatingCallsRemaining;
 
 	FTimerHandle GameOverTimerHandle;
