@@ -4,6 +4,7 @@
 #include "MyPawn.h"
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 // Sets default values
 AMyPawn::AMyPawn()
 {
@@ -15,8 +16,13 @@ AMyPawn::AMyPawn()
 	
 	// Init Mesh
 	myMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MyMesh"));
+	
+	MySkeletalMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MySkeletalMeshComponent"));
+
 	RootComponent = myMesh;
 
+	// ActorConstructor.cpp
+	
 	// Init BoxComponent
 	myBoxCollision->SetupAttachment(myMesh);
 	myBoxCollision->SetCollisionProfileName(TEXT("OverlapAll"));
@@ -25,7 +31,11 @@ AMyPawn::AMyPawn()
 	myMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	myMesh->SetCollisionResponseToChannel(ECC_Visibility, ECR_Overlap);
 
+	MySkeletalMeshComponent->SetupAttachment(myMesh);
+	MySkeletalMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	
 	myMesh->OnClicked.AddDynamic(this, &AMyPawn::OnClicked);
+
 }
 
 // Called when the game starts or when spawned
@@ -45,6 +55,37 @@ void AMyPawn::Tick(float DeltaTime)
 		myMesh->AddImpulse(impulse * appliedImpulseStrength, NAME_None, true);
 		bShouldApplyImpulse = false;  // Reset the condition to avoid continuous impulses
 		UE_LOG(LogTemp, Display, TEXT("bShouldApplyImpulse: %s"), *impulse.ToString());
+	}
+
+	if(bClickedOnThePlayer)
+	{
+		const APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+		if(PlayerController != nullptr)
+		{
+			float MouseX, MouseY;
+			if (PlayerController->GetMousePosition(MouseX, MouseY))
+			{
+				FVector WorldLocation, WorldDirection;
+				if (PlayerController->DeprojectScreenPositionToWorld(MouseX, MouseY, WorldLocation, WorldDirection))
+				{
+					// Raycast or use the direction to determine the world position
+					FVector EndPoint = WorldLocation + (WorldDirection * 10000); // Arbitrary distance
+					FHitResult HitResult;
+					if (GetWorld()->LineTraceSingleByChannel(HitResult, WorldLocation, EndPoint, ECC_Visibility))
+					{
+						FVector MouseWorldPosition = HitResult.Location;
+						FVector actorLocation = GetActorLocation();
+						FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(actorLocation, MouseWorldPosition);
+
+						FRotator CurrentRotation = GetActorRotation();
+						FRotator NewRotation = FRotator(CurrentRotation.Pitch, LookAtRotation.Yaw, CurrentRotation.Roll);
+						FRotator finalRotation = FMath::RInterpTo(CurrentRotation, NewRotation,DeltaTime, 2.f);
+						SetActorRotation(finalRotation);
+					}
+				}
+			}
+			
+		}
 	}
 }
 

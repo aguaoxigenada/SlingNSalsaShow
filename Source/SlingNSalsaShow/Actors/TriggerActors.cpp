@@ -91,7 +91,7 @@ void ATriggerActors::CheckObjectsPassedPoint(AMyPawn* MyPawn)
 		ATriggerActors* Object = *ActorItr;
 
 		// Check if the X-coordinate of the object is greater than the reference X
-		if (  abs(PawnsXPosition) > abs(Object && Object->GetActorLocation().X))
+		if (  FMath::Abs(PawnsXPosition) > FMath::Abs(Object && Object->GetActorLocation().X))
 		{
 			HandleDestruction();
 		}

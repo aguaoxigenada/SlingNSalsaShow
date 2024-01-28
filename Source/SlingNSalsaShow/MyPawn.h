@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/Pawn.h"
 #include "MyPawn.generated.h"
@@ -22,6 +23,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent* myMesh = nullptr;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	USkeletalMeshComponent* MySkeletalMeshComponent;
+	
 	// Handler for when the actor is clicked
 	UFUNCTION()
 	// void OnClicked(UPrimitiveComponent* TouchedActor, FKey ButtonPressed);
