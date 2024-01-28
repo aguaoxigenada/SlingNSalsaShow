@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "TriggerActors.generated.h"
 
+class AMyPawn;
+class ASlingNSalsaShowGameMode;
 class UBoxComponent;
 
 UCLASS()
@@ -26,7 +28,12 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION()
-		void OnBeginOverlap(AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+		void OnBeginOverlapMyPawn(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+		void OnEndOverlapMyPawn(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	void CheckObjectsPassedPoint(AMyPawn* MyPawn);
 
 	UFUNCTION()
 		void HandleDestruction();
@@ -39,6 +46,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		UParticleSystemComponent* FancyParticles = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UParticleSystemComponent* SpancyParticles = nullptr;
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Combat")

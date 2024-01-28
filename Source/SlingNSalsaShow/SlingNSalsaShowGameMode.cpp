@@ -23,7 +23,7 @@ void ASlingNSalsaShowGameMode::ActorDied(AActor* DeadActor)
 {
     if (ATriggerActors* DestroyedTrigger = Cast<ATriggerActors>(DeadActor))
     {
-        DestroyedTrigger->HandleDestruction();
+       // DestroyedTrigger->HandleDestruction();
         TargetTriggers--;
 
         //UE_LOG(LogTemp, Warning, TEXT("Amount of Cubes: %d"), TargetCubes);
@@ -31,19 +31,19 @@ void ASlingNSalsaShowGameMode::ActorDied(AActor* DeadActor)
         if (TargetTriggers == 0 && DeadActor->ActorHasTag("Wave1"))
         {
             TargetTriggers = GetTargetCubeCount(1);
-            BP_SpawnNewBrickWave(0);
+            BP_SpawnNewObjective(0);
         }
 
         else if (TargetTriggers == 0 && DeadActor->ActorHasTag("Wave2"))
         {
             TargetTriggers = GetTargetCubeCount(2);
-            BP_SpawnNewBrickWave(1);
+            BP_SpawnNewObjective(1);
         }
 
         else if (TargetTriggers == 0 && DeadActor->ActorHasTag("Wave3"))
         {
             TargetTriggers = GetTargetCubeCount(3);
-            BP_SpawnNewBrickWave(2);
+            BP_SpawnNewObjective(2);
         }
 
         else if (TargetTriggers == 0 && DeadActor->ActorHasTag("Wave4"))
@@ -65,34 +65,34 @@ void ASlingNSalsaShowGameMode::BeginPlay()
 
 void ASlingNSalsaShowGameMode::HandleGameStart()
 {
-    TargetCubes = GetTargetCubeCount(0);
+    TargetTriggers = GetTargetCubeCount(0);
     // UE_LOG(LogTemp, Warning, TEXT("Amount of Cubes: %d"), TargetCubes);
 }
 
 int32 ASlingNSalsaShowGameMode::GetTargetCubeCount(int actualWave)
 {
     // Calcula y retorna la cantidad de Cubos que hay actualmente en el escenario
-    TArray<AActor*> Cubes;
-    UGameplayStatics::GetAllActorsOfClass(this, ABK_Cube::StaticClass(), Cubes);
+    TArray<AActor*> TriggerShow;
+    UGameplayStatics::GetAllActorsOfClass(this, ATriggerActors::StaticClass(), TriggerShow);
 
     switch (actualWave)
     {
     case 0:
-        UGameplayStatics::GetAllActorsWithTag(this, "Wave1", Cubes);
+        UGameplayStatics::GetAllActorsWithTag(this, "Wave1", TriggerShow);
         break;
     case 1:
-        UGameplayStatics::GetAllActorsWithTag(this, "Wave2", Cubes);
+        UGameplayStatics::GetAllActorsWithTag(this, "Wave2", TriggerShow);
         break;
     case 2:
-        UGameplayStatics::GetAllActorsWithTag(this, "Wave3", Cubes);
+        UGameplayStatics::GetAllActorsWithTag(this, "Wave3", TriggerShow);
         break;
     case 3:
-        UGameplayStatics::GetAllActorsWithTag(this, "Wave4", Cubes);
+        UGameplayStatics::GetAllActorsWithTag(this, "Wave4", TriggerShow);
         break;
     default:
         break;
     }
 
-    return Cubes.Num();
+    return TriggerShow.Num();
 }
 

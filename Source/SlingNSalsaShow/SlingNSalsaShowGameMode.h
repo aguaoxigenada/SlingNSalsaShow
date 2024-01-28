@@ -24,12 +24,11 @@ protected:
 	virtual void BeginPlay() override;
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void BP_SpawnNewBrickWave(int waveNum);
+	void BP_SpawnNewObjective(int waveNum);
 
 private:
 
-	class ABK_Cube* Cube;
-	class ABomberKiddoPlayerController* BomberKiddoPlayerControler;
+	class ATriggerActors* Objective;
 	class UBK_UIHudInGame* HudInGame;
 
 	void HandleGameStart();
