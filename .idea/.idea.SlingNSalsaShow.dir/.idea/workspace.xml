@@ -8,10 +8,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="deab7d13-abc2-4d05-9107-80c34d190248" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Content/StarterContent/Audio/Explosion02.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/StarterContent/Audio/Explosion02.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.SlingNSalsaShow.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SlingNSalsaShow.dir/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Character/AnimBpPlayer.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Character/AnimBpPlayer.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Character/Animation/skel_fall.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Character/Animation/skel_fall.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Character/Animation/skel_laugh.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Character/Animation/skel_laugh.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/StarterContent/Architecture/Wall_Door_400x400.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/StarterContent/Architecture/Wall_Door_400x400.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/StarterContent/Audio/Explosion_Cue.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/StarterContent/Audio/Explosion_Cue.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/StarterContent/Blueprints/Blueprint_CeilingLight.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/StarterContent/Blueprints/Blueprint_CeilingLight.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/TopDown/Blueprints/MovingObjects/BP_MyPawn.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/TopDown/Blueprints/MovingObjects/BP_MyPawn.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/TopDown/Maps/Level_1.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/TopDown/Maps/Level_1.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SlingNSalsaShow/Actors/TriggerActors.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SlingNSalsaShow/Actors/TriggerActors.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/SlingNSalsaShow/MyPawn.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SlingNSalsaShow/MyPawn.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/SlingNSalsaShow/MyPawn.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SlingNSalsaShow/MyPawn.h" afterDir="false" />
     </list>
@@ -145,6 +149,7 @@
       <workItem from="1706450947304" duration="1077000" />
       <workItem from="1706452534968" duration="842000" />
       <workItem from="1706453545111" duration="1312000" />
+      <workItem from="1706466162236" duration="1108000" />
     </task>
     <servers />
   </component>

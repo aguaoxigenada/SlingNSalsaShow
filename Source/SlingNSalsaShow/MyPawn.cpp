@@ -2,9 +2,12 @@
 
 
 #include "MyPawn.h"
+
+#include "Animation/AnimNode_StateMachine.h"
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+
 // Sets default values
 AMyPawn::AMyPawn()
 {
@@ -35,13 +38,20 @@ AMyPawn::AMyPawn()
 	MySkeletalMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	
 	myMesh->OnClicked.AddDynamic(this, &AMyPawn::OnClicked);
-
 }
 
 // Called when the game starts or when spawned
 void AMyPawn::BeginPlay()
 {
 	Super::BeginPlay();
+
+	UAnimInstance* AnimInstance = MySkeletalMeshComponent->GetAnimInstance();
+	if(AnimInstance)
+	{
+		MyAnimInstance = Cast<UMyAnimInstance>(AnimInstance);
+
+		UE_LOG(LogTemp, Warning, TEXT("%%%%%%^^ ADDING MY ANIM INSTANCE"));
+	}
 }
 
 // Called every frame
@@ -104,6 +114,10 @@ void AMyPawn::OnClicked(UPrimitiveComponent* TouchedActor, FKey ButtonPressed)
 {
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("OnClicked"));
 	bClickedOnThePlayer = true;
+	if(MyAnimInstance)
+	{
+		MyAnimInstance->SetIsBeingClicked(true);
+	}
 	UE_LOG(LogTemp, Warning, TEXT("OnClicked on the player %s -"), bClickedOnThePlayer ? TEXT("true") : TEXT("false"));
 }
 
@@ -156,7 +170,11 @@ void AMyPawn::OnReleased(AActor* UPrimitiveComponent, FKey ButtonReleased)
 					}
 				}	
 			}
-		}	
+		}
+	}
+	if(MyAnimInstance)
+	{
+		MyAnimInstance->SetIsBeingClicked(false);
 	}
 	bClickedOnThePlayer = false;
 }
