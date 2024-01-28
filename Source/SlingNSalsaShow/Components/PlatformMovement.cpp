@@ -21,7 +21,7 @@ void UPlatformMovement::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 	if (bCanMove)
 	{
 		MovePlatform(DeltaTime);
-		RotatePlatform(DeltaTime);
+		//RotatePlatform(DeltaTime);
 	}
 
 }
